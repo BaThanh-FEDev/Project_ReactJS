@@ -1,0 +1,33 @@
+{
+  "content": {
+      "functional": "Hàm",
+      "class": "Lớp",
+      "text": "Đây là văn bản"
+  },
+  "popularArticles": "Bài viết phổ biến",
+  "newArticles": "Bài viết mới",
+  "generalArticles": "Bài viết tổng hợp",
+  "viewMore": "Xem thêm",
+  "valueSearch": "Nhập từ khóa tìm kiếm...",
+  "resultSearch": "kết quả tìm kiếm với từ khóa",
+  "nameCate": "Danh mục",
+  "resultCate": "Không có bài viết nào thuộc danh mục này",
+  "nameTag": "Nhãn",
+  "resultTag": "Không có bài viết nào thuộc nhãn này",
+  "username": "Tên tài khoản",
+  "password": "Mật khẩu",
+  "login": "Đăng nhập",
+  "register": "Đăng ký",
+  "logout": "Đăng xuất",
+  "register?": "Bạn chưa có tài khoản?",
+  "login?": "Bạn đã có tài khoản?",
+  "loginSuccess": "Đăng nhập thành công!",
+  "hello": "Xin chào, ",
+  "user": "Người dùng",
+  "article": "Bài viết",
+  "infor": "Thông tin",
+  "changepw": "Đổi mật khẩu",
+  "add": "Tạo bài viết",
+  "list": "Danh sách "
+}
+

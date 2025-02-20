@@ -1,0 +1,32 @@
+.categories-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .categories-form .ant-form-item {
+    margin-bottom: 0;
+    margin-right: 15px;
+  }
+  
+  .categories-form button {
+    border-radius: 30px;
+  }
+  .deleleCate {
+    background-color: #fff !important;
+    color: #ff4d4f !important;
+    border: 1px solid #ff4d4f;
+    border-radius: 30px;
+  }
+  .deleleCate:hover {
+    background-color: #ff4d4f !important;
+    color: #fff !important;
+  }
+  .deleteCateInTable {
+    border: none;
+    color: #ff4d4f;
+  }
+  .ant-popconfirm .ant-popconfirm-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }

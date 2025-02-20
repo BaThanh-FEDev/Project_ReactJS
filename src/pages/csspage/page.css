@@ -1,0 +1,29 @@
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.pageNotFound {
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Chiều cao toàn màn hình */
+  text-align: center;
+  background-color: #f5f5f5; /* Màu nền nhẹ */
+}
+
+.pageNotFound h1 {
+    font-size: 3rem; /* Cỡ chữ lớn */
+    font-weight: bold;
+    color: #ff4d4f; /* Màu đỏ nổi bật */
+    margin: 0;
+  }
+  
+  .pageNotFound p {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 10px;
+  }
+  

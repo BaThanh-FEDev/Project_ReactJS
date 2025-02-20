@@ -1,0 +1,32 @@
+{
+  "content": {
+      "functional": "Functional",
+      "class": "Class",
+      "text": "This is text"
+  },
+   "popularArticles": "Popular Articles",
+   "newArticles": "New Articles",
+  "generalArticles": "General Articles",
+  "viewMore": "View More",
+  "valueSearch": "Enter keyword...",
+  "resultSearch": "search results with keyword",
+  "nameCate": "Category",
+  "resultCate": "There are no posts in this category",
+  "nameTag": "Tag",
+  "resultTag": "There are no posts in this tag",
+  "username": "Username",
+  "password": "Password",
+  "login": "Login",
+  "register": "Register",
+  "logout": "Log out",
+  "login?": "Already have an account?",
+  "register?": "Don't have an account?",
+  "loginSuccess": "Login successful!",
+  "hello": "Hello, ",
+  "user": "User",
+  "article": "Article",
+  "infor": "Profile",
+  "changepw": "Change passowrd",
+  "add": "Add article",
+  "list": "List articles"
+}

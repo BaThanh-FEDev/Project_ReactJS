@@ -1,0 +1,37 @@
+.language-switcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .language-list {
+    display: table;
+    content: "";
+    clear: both;
+    margin-bottom: 0;
+    padding: 0;
+  }
+  .language-list li {
+    list-style: none;
+    float: left;
+  }
+  .language-list li:not(:first-child) .language-item {
+    border-left: 2px solid #eee;
+    margin-left: 2px;
+  }
+  .language-item {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    color: #718096;
+    padding: 0 5px;
+  }
+  
+  .language-item:hover {
+    color: #61dafb;
+  }
+  
+  .language-item.active {
+    color: #61dafb;
+  }
+  

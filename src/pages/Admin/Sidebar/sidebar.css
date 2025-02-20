@@ -1,0 +1,75 @@
+:root {
+    --colorDefault: #61dafb
+}
+
+.ant-menu-inline.ant-menu-root .ant-menu-submenu-title>.ant-menu-title-content,
+.ant-menu-inline.ant-menu-root .ant-menu-item>.ant-menu-title-content {
+    font-weight: 500;
+    font-size: 14.5px;
+}
+
+.ant-layout-sider,
+.ant-layout-sider .ant-layout-sider-trigger {
+    background-color: #fff;
+    color: #111;
+}
+
+.ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title,
+.ant-menu-light>.ant-menu .ant-menu-submenu-selected>.ant-menu-submenu-title,
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
+    color: var(--colorDefault);
+    border-radius: 0 2px 2px 0;
+}
+
+.ant-layout-sider .ant-layout-sider-trigger:hover {
+    color: var(--colorDefault);
+}
+
+.ant-menu-inline.ant-menu-root,
+.ant-menu-vertical.ant-menu-root {
+    margin-top: 18px;
+}
+
+.ant-breadcrumb {
+    margin: 30px 0 20px !important;
+}
+
+.ant-layout-content {
+    margin: 0 20px !important;
+}
+
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover,
+.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
+    background-color: rgb(97 218 251 / 10%);
+    border-radius: 0 2px 2px 0;
+    color: var(--colorDefault);
+}
+
+.ant-breadcrumb ol {
+    font-weight: 500;
+}
+
+.ant-layout-sider a,
+.ant-menu-title-content a {
+    color: #111;
+}
+
+.ant-menu-submenu-title:hover .ant-menu-title-content a {
+    color: var(--colorDefault);
+}
+
+.ant-menu .ant-menu-title-content {
+    transition: none !important;
+}
+
+.ant-menu-submenu-selected a {
+    color: var(--colorDefault);
+}
+.sidebarLogo {
+    margin-top: 20px;
+}
+.ant-menu-light.ant-menu-root.ant-menu-inline {
+    border-inline-end: none;
+}

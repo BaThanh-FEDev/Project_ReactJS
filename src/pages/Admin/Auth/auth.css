@@ -1,0 +1,36 @@
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item,
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item::before,
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-thumbnail {
+    border-radius: 50%;
+}
+
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item {
+    padding: 5px;
+}
+
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item::before {
+    width: calc(100% - 10px);
+    height: calc(100% - 9px);
+}
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select {
+    height: auto;
+    width: auto;
+}
+.navDashboard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.infor {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transform: translateY(10px);
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.infor img {
+    width: 20px;
+    border-radius: 50%;
+}

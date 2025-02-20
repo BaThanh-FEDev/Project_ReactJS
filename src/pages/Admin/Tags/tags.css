@@ -1,0 +1,43 @@
+.tags-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .tags-form .ant-form-item {
+    margin-bottom: 0;
+    margin-right: 15px;
+  }
+  
+  .tags-form button {
+    border-radius: 8px;
+  }
+  .deleleTag {
+    background-color: #fff !important;
+    color: #ff4d4f !important;
+    border: 1px solid #ff4d4f;
+    border-radius: 30px;
+  }
+  .deleleTag:hover {
+    background-color: #ff4d4f !important;
+    color: #fff !important;
+  }
+  .deleteTagInTable {
+    border: none;
+    color: #ff4d4f;
+  }
+  .ant-popconfirm .ant-popconfirm-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .ant-form-item .ant-form-item-control-input-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ant-btn-variant-link {
+    color: #111;
+  }
+  .ant-btn-variant-link:not(:disabled):not(.ant-btn-disabled):hover {
+    color: #61dafb;
+  }

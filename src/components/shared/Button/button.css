@@ -1,0 +1,76 @@
+.btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 2px;
+  display: inline-block;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  padding: 0.25rem 1rem;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+  border: 0;
+}
+.btn-default {
+  color: #718096;
+  background-color: #e2e8f0;
+}
+.btn-default:hover {
+  color: #fff;
+  background-color: #717171;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #61dafb;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #717171;
+}
+.btn-category {
+  background-color: #e9d8fd;
+  color: rgba(0, 0, 0, 0.4);
+}
+.btn-category:hover {
+  color: #e2e8f0;
+  background-color: #718096;
+}
+.btn-size-large {
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+  font-weight: 400;
+  border-radius: 9999px;
+}
+.btn svg {
+  height: 1em;
+}
+
+.handleButton {
+  position: absolute;
+    right: 5px;
+    top: 5px;
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    box-shadow: none;
+    color: #666;
+}
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #61dafb;
+}
+.ant-btn-variant-outlined {
+  border: none;
+  box-shadow: none;
+  display: block;
+}
+.ant-popover .ant-popover-inner {
+  padding: 5px;
+}
+.ant-popover .ant-popover-content {
+  margin-top: -5px;
+}
+.ant-popover-placement-bottomRight >.ant-popover-arrow {
+  top: -5px;
+}

@@ -1,0 +1,87 @@
+.form-login-register {
+  width: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  box-shadow: rgba(1, 1, 1, 0.05) 1px 1px 5px 0px; }
+
+.form-control {
+  position: relative;
+  margin-bottom: 1.25rem; }
+  .form-control input {
+    box-sizing: border-box;
+    margin: 0;
+    min-width: 0;
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: inherit;
+    line-height: inherit;
+    border: 1px solid;
+    border-radius: 4px;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    background-color: #edf2f7;
+    outline: none; }
+  .form-control .toggle-password {
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    position: absolute; }
+    .form-control .toggle-password:hover {
+      color: #61dafb; }
+    .form-control .toggle-password + input {
+      padding-right: 3rem; }
+
+.form-title {
+  box-sizing: border-box;
+  min-width: 0px;
+  font-family: Muli, sans-serif;
+  line-height: 1.33;
+  display: block;
+  color: #2d3748;
+  font-weight: 900;
+  font-size: 1.875rem;
+  margin: 0px 0px 1.5rem;
+  text-decoration: none; }
+  .alert-danger {
+    color: #58151c;
+    background-color: #f8d7da;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  textarea {
+    width: 100%;
+    margin: 30px 0 ;
+    min-width: 0;
+    display: block;
+    padding: 0.5rem 1rem;
+    appearance: none;
+    font-size: inherit;
+    line-height: inherit;
+    border-radius: 4px;
+    color: inherit;
+    border: none;
+    background-color: #edf2f7;
+    outline: none;
+  }
+  .boxLogin {
+    background-color: #fff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  .errorMessage {
+    margin: 10px 0;
+    color: #ff4d4f;
+  }
+  @media screen and (min-width: 640px) {
+    .form-title {
+      font-size: 2.25rem; } }

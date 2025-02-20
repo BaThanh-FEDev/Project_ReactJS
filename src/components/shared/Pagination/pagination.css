@@ -1,0 +1,33 @@
+.cursor-text {
+    cursor: text;
+}
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.custom-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.custom-pagination li {
+    float: left;
+    list-style-type: none;
+    margin: 0 5px;
+}
+
+.custom-pagination li a {
+    padding: 6px 12px;
+    color: #111;
+}
+
+.custom-pagination li a.is-active {
+    background-color: #61dafb;
+    color: #fff;
+    border-color: #61dafb;
+    border-radius: 50%;
+}
