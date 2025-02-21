@@ -1,48 +1,37 @@
 /* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { formattedDate } from "../../../helpers/myDayjs";
-import { fetchChildComments, getParentId, isFocusForm, resetFocus } from "../../../store/commentSlice";
+import { fetchChildComments, getParentIdComment } from "../../../store/commentSlice";
 import CommentReplay from "./CommentReplay";
 import { useState } from "react";
+import "./comment.css"
+import CommentForm from "./CommentForm";
 
 function CommentItem(props) {
   const dispatch = useDispatch();
-  const postDetail = useSelector((state) => state.POST.postDetail);
-  const commentReplayList = useSelector(
-    (state) => state.COMMENT.commentReplayList
-  );
-  const { item } = props;
-  const {
-    id,
-    content,
-    author_data: authorData,
-    date,
-    comment_reply_count: commentReplyCount,
-  } = item;
-  const { avatar, nick_name: nickName } = authorData;
-  const contentRendered = content.rendered
-    .replace("<p>", "")
-    .replace("</p>", "");
-  const dateFormatted = formattedDate(date);
-
-  const filterCommentReplayList = commentReplayList.filter(
-    (childItem) => childItem.parent === id
-  );
   
+  const postDetail = useSelector((state) => state.POST.postDetail);
+
+  const { item } = props;
+  const {id, content, author_data: authorData, date, comment_reply_count: commentReplyCount,} = item;
+  const { avatar, nickname: nickName } = authorData;
+  const contentRendered = content.rendered.replace("<p>", "").replace("</p>", "");
+  const dateFormatted = formattedDate(date);
+  
+  const commentReplayList = useSelector((state) => state.COMMENT.commentReplayList);
+  const filterCommentReplayList = commentReplayList.filter((childItem) => childItem.parent === id);
   const filterCommentReplayListLength = filterCommentReplayList.length;
-  const xhtmlChildComments = filterCommentReplayList.map((childItem, index) => (
-    <CommentItem key={index} item={childItem} />
-  ));
-  const isShowLoadMore =
-    commentReplyCount > 0 && filterCommentReplayListLength != commentReplyCount;
-  const newReplayComment = useSelector(
-      (state) => state.COMMENT.newReplayComment
-    );
+  const [isShowReplyForm, setIsShowReplyForm] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
+  const newReplayComment = useSelector((state) => state.COMMENT.newReplayComment);
+
+  const totalRepliesLoaded = commentReplayList.filter(childItem => childItem.parent === id).length;
+  const isShowLoadMore = commentReplyCount > 0 && totalRepliesLoaded < commentReplyCount;
+
+  
 
   function handleLoadReplayComments(e) {
     e.preventDefault();
-
-    dispatch(resetFocus());  
     dispatch(
       fetchChildComments({
         idPost: postDetail.id,
@@ -52,37 +41,43 @@ function CommentItem(props) {
     );
   }
   function handleReplayComment(e) {
-    const parentId = id;
-    dispatch(getParentId(parentId));
-    dispatch(isFocusForm("click"))
+    if (!isShowReplyForm) {
+      dispatch(getParentIdComment(id)); 
+      setIsFocus(true)
+    } else {
+      dispatch(getParentIdComment(null));
+    }
+    setIsShowReplyForm(!isShowReplyForm);
   }
 
   return (
     <li className="item">
       <div className="comments__section">
         <div className="comments__section--avatar">
-          <a href="/">
+          <a href="#" onClick={(e) => e.preventDefault()}>
             <img src={avatar} alt="" />
           </a>
         </div>
         <div className="comments__section--content">
-          <a href="/" className="comments__section--user">
+          <a href="#" onClick={(e) => e.preventDefault()} className="comments__section--user">
             {nickName}
           </a>
           <p className="comments__section--time">
             {dateFormatted} - ID: {id}
           </p>
           <div className="comments__section--text">{contentRendered}</div>
-          <i className="ion-reply comments__section--reply" onClick={handleReplayComment}></i>
+          <a className="ion-reply comments__section--reply" onClick={handleReplayComment}></a>
         </div>
       </div>
-      <ul className="comments">
-          {item.parents === newReplayComment.id && <CommentReplay/>}
-      </ul>
+      {isShowReplyForm && <CommentForm  isFocus={isFocus} onCloseForm={() => setIsShowReplyForm(false)} />}
       {filterCommentReplayListLength > 0 && (
         <ul className="comments">
-          {/* {item.parents === newReplayComment.id && <CommentReplay/>} */}
-          {xhtmlChildComments}
+          {item.parents === newReplayComment.id && <CommentReplay/>}
+          {
+            filterCommentReplayList.map((childItem, index) => (
+              <CommentItem key={index} item={childItem} />
+            ))
+          }
         </ul>
       )}
 

@@ -1,0 +1,10 @@
+.ion-reply:hover {
+    color: #61dafb !important;
+}
+.handleButtonForm {
+    display: block;
+    text-align: right;
+}
+.handleButtonForm button:last-child{
+    margin-left: 10px;
+}

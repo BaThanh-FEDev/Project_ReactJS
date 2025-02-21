@@ -23,13 +23,6 @@ const initialState = {
     totalPage: null,
     currentPage: 1,
   },
-  
-
-  commentList: [],
-  totalPageComment: null,
-  currentPageComment: 1,
-  commentReplayList: [],
-  totalCommentReplayCount: null,
 
   postAll: {
     allPostsList: [],

@@ -80,7 +80,7 @@
 
 .comments__section--user {
   font-weight: 500;
-  color: #61dafb;
+  color: #718096;
   margin-right: 0.25rem;
 }
 
@@ -147,6 +147,7 @@
 
 .comments__hidden {
   padding-left: 55px;
+  margin-top: 10px;
 }
 
 .comments__hidden.parent {

@@ -2,17 +2,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/commentService";
 
 const initialState = {
-  commentList: [],
-  totalPageComment: 0,
-  totalComment: 0,
-  currentPageComment: 1,
+  commentData: {
+    commentList: [],
+    totalComment: null,
+    currentPage: 1,
+  },
+  
 
   commentReplayList: [],
-
-  newComment: "",
   newReplayComment: "",
   parentId: null,
-  isFocus: "",
 };
 
 const name = "comment";
@@ -27,7 +26,6 @@ export const fetchComments = createAsyncThunk(
         commentList: response.data,
         currentPage: params.currentPage,
         totalComment: parseInt(response.headers[`x-wp-total`]),
-        totalPageComment: parseInt(response.headers[`x-wp-totalpages`]),
       };
       return data;
     } catch (err) {
@@ -64,49 +62,42 @@ const slice = createSlice({
   name,
   initialState,
   reducers: {
-    getParentId(state, action) {
+    getParentIdComment(state, action) {
       state.parentId = action.payload;
-    },
-    isFocusForm(state, action) {
-      state.isFocus = action.payload;
-    },
-
-    resetFocus(state) {
-      console.log("resetFocus");
-
-      state.isFocus = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchComments.fulfilled, (state, action) => {
-        const { commentList, currentPage, totalPageComment, totalComment } =
+        const { commentList, currentPage, totalComment } =
           action.payload;
-        state.commentList =
+        state.commentData.commentList =
           currentPage === 1
             ? commentList
-            : [...state.commentList, ...commentList];
-        state.totalPageComment = totalPageComment;
-        state.totalComment = totalComment;
-        state.currentPageComment = currentPage;
+            : [...state.commentData.commentList, ...commentList];
+        state.commentData.totalComment = totalComment;
+        state.commentData.currentPage = currentPage;
         if (currentPage === 1) state.commentReplayList = [];
+        
       })
       .addCase(fetchChildComments.fulfilled, (state, action) => {
-        state.commentReplayList = [
-          ...state.commentReplayList,
-          ...action.payload,
-        ];
+        const newComments = action.payload.filter(
+          (newComment) => !state.commentReplayList.some(
+            (existingComment) => existingComment.id === newComment.id
+          )
+        );
+        state.commentReplayList = [...state.commentReplayList, ...newComments];
       })
       .addCase(postNewOrReplayComment.fulfilled, (state, action) => {
         if (action.payload.parent === 0) {
-          state.newComment = action.payload;
-          state.commentList = [...state.commentList, action.payload];
+          state.commentData.commentList = [action.payload, ...state.commentData.commentList ];
         } else {
           state.newReplayComment = action.payload;
-          state.commentReplayList = [
-            ...state.commentReplayList,
-            action.payload,
-          ];
+          const isExistingComment = state.commentReplayList.some(comment => comment.id === action.payload.id);
+
+    if (!isExistingComment) {
+      state.commentReplayList = [action.payload, ...state.commentReplayList] ;
+    }
         }
       });
   },
@@ -114,6 +105,6 @@ const slice = createSlice({
 
 const { reducer, actions } = slice;
 
-export const { getParentId, isFocusForm, resetFocus } = actions;
+export const { getParentIdComment } = actions;
 
 export default reducer;
