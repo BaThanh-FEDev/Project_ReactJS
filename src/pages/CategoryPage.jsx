@@ -17,10 +17,12 @@ function CategoryPage() {
   const { nameCategory, postListByCate, currentPage, totalPage } = useSelector(
     (state) => state.CATEGORY.categoryData
   );
+  const lang = useSelector((state) => state.CONFIG.lang)
+  
 
   useEffect(() => {
-    if (slug) dispatch(getCategoryBySlug({ slug, pageNumber: 1 }));
-  }, [slug, dispatch]);
+    if (slug) dispatch(getCategoryBySlug({ slug, pageNumber: 1, lang }));
+  }, [slug, dispatch, lang]);
 
   if (!postListByCate) {
     return (

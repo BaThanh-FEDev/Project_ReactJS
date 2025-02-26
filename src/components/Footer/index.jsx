@@ -1,11 +1,16 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './footer.css';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { fetchTagsAdminWithPaging } from '../../store/tagsSlice';
 
 function Footer() {
+  const dispatch = useDispatch();
+  useEffect(() =>{
+    dispatch(fetchTagsAdminWithPaging())
+  }, [])
   const categoryList = useSelector((state) => state.CATEGORY.categoryList);
-  const postListByTag = useSelector((state) => state.TAG.tagData.postListByTag)
-  
+  const listTags = useSelector((state) => state.TAG.tagsData.listTags);
   
   function renderList (list) {
     let xhtml = list.map((item, index) => {
@@ -48,7 +53,7 @@ function Footer() {
                 <p>Tags</p>
               </div>
               <ul className="footer-content__list">
-                {renderList(postListByTag)}
+                {renderList(listTags)}
               </ul>
             </div>
             {/* Footer Column */}

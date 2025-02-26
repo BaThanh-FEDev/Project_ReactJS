@@ -5,6 +5,7 @@ import { useNotAuthenticate } from "../../../hooks/useNotAuthenticate";
 import React, { useMemo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { t } from "i18next";
+import "./auth.css"
 
 function Dashboard() {
   useNotAuthenticate();
@@ -39,7 +40,7 @@ function Dashboard() {
       <Content>
         {/* Hiện Spin nếu đang loading */}
         {loading ? (
-          <div className="flex justify-center items-center h-screen">
+           <div className="loading-container">
             <Spin size="large" tip="Đang tải dữ liệu..." />
           </div>
         ) : (

@@ -53,9 +53,9 @@ export const getTagsByIdPost = createAsyncThunk(
 
 export const getPostByTags = createAsyncThunk(
   `${name}/getPostByTags`,
-  async ({ slug, pageNumber }) => {
+  async ({ slug, pageNumber, lang }) => {
     try {
-      const response = await tagService.getTagBySlug({ slug });
+      const response = await tagService.getTagBySlug({ slug, lang });
 
       if (response.data) {
         const tagIdBySlug = response.data[0].id;

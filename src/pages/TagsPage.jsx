@@ -17,10 +17,11 @@ function TagsPage() {
   const { postListByTag, nameTag, currentPage, totalPage } = useSelector(
     (state) => state.TAG.tagData
   );
+  const lang = useSelector((state) => state.CONFIG.lang)
 
   useEffect(() => {
-    if (slug) dispatch(getPostByTags({ slug, pageNumber: 1 }));
-  }, [slug, dispatch]);
+    if (slug) dispatch(getPostByTags({ slug, pageNumber: 1, lang }));
+  }, [slug, dispatch, lang]);
 
   if (!postListByTag) {
     return (

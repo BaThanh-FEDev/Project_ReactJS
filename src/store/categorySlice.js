@@ -44,10 +44,9 @@ export const fetchCategory = createAsyncThunk(
 
 export const getCategoryBySlug = createAsyncThunk(
   `${name}/getCategoryBySlug`,
-  async ({ slug, pageNumber }, thunkAPI) => {
+  async ({ slug, pageNumber, lang }) => {
     try {
-      const lang = thunkAPI.getState().CONFIG.lang;
-      const response = await categoryService.getCategoryBySlug({ slug});
+      const response = await categoryService.getCategoryBySlug({ slug, lang});
       if (response.data) {
         const categoryIdBySlug = response.data[0].id;
         const responsePost = await postService.getByCategory({

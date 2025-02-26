@@ -16,13 +16,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useNotAuthenticate } from "../../../hooks/useNotAuthenticate";
-import API from "../../../services/api";
+import imageService from "../../../services/mediaService";
 import { createArticle } from "../../../store/postSlice";
 import "../admin.css";
 import ImageUpload from "../Media/ImageUpload";
 import Sidebar from "../Sidebar";
 import "./articles.css";
-import imageService from "../../../services/mediaService";
 // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 // import { CKEditor } from "@ckeditor/ckeditor5-react";
 

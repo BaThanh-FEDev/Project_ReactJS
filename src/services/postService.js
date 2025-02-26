@@ -13,8 +13,20 @@ const postService = {
   },
 
   // xong
+  // getAllPosts(params = {}) {
+  //   console.log(params);
+    
+  //   return this.getAll({ page: params.pageNumber });
+  // },
   getAllPosts(params = {}) {
-    return this.getAll({ page: params.pageNumber });
+    return API.callWithToken().get(`/wp/v2/posts?`, {
+      params: {
+        per_page: 3,
+        page: params.pageNumber || 1,
+        lang: localStorage.getItem("LANG") || "vi",
+        status: ['publish','pending','draft']
+      }
+    });
   },
 
   // xong

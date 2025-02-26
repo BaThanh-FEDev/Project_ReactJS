@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
@@ -22,17 +22,32 @@ import TagsIndexPage from "./pages/Admin/Tags";
 import ArticleEditPage from "./pages/Admin/Articles/ArticlesEditPage";
 import Dashboard from "./pages/Admin/Auth";
 import { fetchTagsName } from "./store/tagsSlice";
+import { Spin } from "antd";
+import "./assets/css/main.css"
 
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const lang = useSelector((state) => state.CONFIG.lang)
+  const lang = useSelector((state) => state.CONFIG.lang);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     dispatch(userGetInfor());
     dispatch(fetchCategory());
     dispatch(fetchTagsName())
   }, [dispatch, lang]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     await Promise.all([
+  //       dispatch(userGetInfor()),
+  //       dispatch(fetchCategory()),
+  //       dispatch(fetchTagsName()),
+  //     ]);
+  //     setIsLoading(false);
+  //   };
+  //   fetchData();
+  // }, [dispatch, lang]);
 
   const routes = [
     { path: "/", element: () => <HomePage /> },
@@ -60,6 +75,17 @@ function App() {
   return (
     <div className="wrapper-content">
       {!isAdminRoute && <Header />}
+      {/* {isLoading ? (
+        <div className="loading-container">
+          <Spin size="large" />
+        </div>
+      ) : (
+        <Routes>
+          {routes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      )} */}
       <Routes>
         {routes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element()} />

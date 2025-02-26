@@ -37,7 +37,11 @@ const tagService = {
 
   // xong
   getTagBySlug(params = {}) {
-    return API.call().get(`wp/v2/tags?slug=${params.slug}`);
+    return API.call().get(`wp/v2/tags?slug=${params.slug}`, {
+      params: {
+        lang: params.lang
+      }
+    });
   },
 
   // xong

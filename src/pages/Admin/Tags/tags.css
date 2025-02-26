@@ -30,11 +30,11 @@
     display: flex;
     justify-content: flex-end;
   }
-  .ant-form-item .ant-form-item-control-input-content {
+  /* .ant-form-item .ant-form-item-control-input-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
+  } */
   .ant-btn-variant-link {
     color: #111;
   }

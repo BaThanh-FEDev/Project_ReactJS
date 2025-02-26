@@ -1,7 +1,6 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Upload, Image, message } from "antd";
+import { Image, message, Upload } from "antd";
 import { useEffect, useState } from "react";
-import API from "../../../services/api";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {

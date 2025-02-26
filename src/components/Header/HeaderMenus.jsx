@@ -147,7 +147,6 @@ function HeaderMenus() {
             {userInfor && (
               <>
                 <Link to="#">
-                  {/* <i className="icons ion-person" /> */}
                   <img src={userAvatar} alt={userInfor.nickname} />
                   {userInfor.nickname}
                 </Link>

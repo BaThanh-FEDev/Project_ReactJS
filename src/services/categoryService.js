@@ -16,7 +16,11 @@ const categoryService = {
   // xong
   getCategoryBySlug(params = {}) {
     return API.call().get(
-      `wp/v2/categories?slug=${params.slug}`
+      `wp/v2/categories?slug=${params.slug}`, {
+        params: {
+          lang: params.lang
+        }
+      }
     );
   },
 

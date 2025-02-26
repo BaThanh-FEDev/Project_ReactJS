@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Input, Button, message, Typography } from "antd";
+import { useForm, Controller } from "react-hook-form";
+import { Button, Typography, Input } from "antd";
 import { useAuthenticate } from "../../hooks/useAuthenticate";
 import { getUserLogin } from "../../store/userSlice";
 import "./login.css";
-import { alertSuccess } from "../../helpers/toastify";
 import { t } from "i18next";
 
 function LoginPage() {
   useAuthenticate();
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState("");
 
-  const onFinish = async (values) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onSubmit" });
+
+  const onSubmit = async (values) => {
     try {
       const res = await dispatch(getUserLogin(values));
       const payload = res.payload;
-      if (payload.status) {
+      if (payload && payload.status) {
         navigate("/admin/dashboard");
       } else {
-        setError(payload.error);
-        // message.error(payload.error);
+        setError(payload?.error || "Đăng nhập thất bại.");
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra, vui lòng thử lại.");
+      setError("Có lỗi xảy ra, vui lòng thử lại.");
     }
   };
 
@@ -37,41 +42,41 @@ function LoginPage() {
         <div className="tcl-row">
           <div className="tcl-col-12 tcl-col-sm-5 block-center">
             <div className="boxLogin">
-            <Typography.Title level={2} className="text-center">
+              <Typography.Title level={2} className="text-center">
                 {t("login")}
               </Typography.Title>
               {error && <div className="errorMessage">{error}</div>}
-              <Form
-                name="login"
-                onFinish={onFinish}
-                autoComplete="off"
-                layout="vertical"
-              >
-                <Form.Item
-                  label={t("username")}
-                  name="username"
-                  rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
-                >
-                  <Input placeholder="Nhập tên đăng nhập ..." autoComplete="username"/>
-                </Form.Item>
+              <form onSubmit={handleSubmit(onSubmit)} className="form">
+                <div className="form-group">
+                  <label>{t("username")}</label>
+                  <Controller
+                    name="username"
+                    control={control}
+                    rules={{ required: "Vui lòng nhập tên đăng nhập!" }}
+                    render={({ field }) => <Input {...field} placeholder="Nhập tên đăng nhập ..." autoComplete="username" />}
+                  />
+                  {errors.username && <p className="error-text">{errors.username.message}</p>}
+                </div>
 
-                <Form.Item
-                  label={t("password")}
-                  name="password"
-                  rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-                >
-                  <Input.Password placeholder="Nhập mật khẩu của bạn ..." autoComplete="current-password" />
-                </Form.Item>
+                <div className="form-group">
+                  <label>{t("password")}</label>
+                  <Controller
+                    name="password"
+                    control={control}
+                    rules={{ required: "Vui lòng nhập mật khẩu!" }}
+                    render={({ field }) => <Input.Password {...field} placeholder="Nhập mật khẩu của bạn ..." autoComplete="current-password" />}
+                  />
+                  {errors.password && <p className="error-text">{errors.password.message}</p>}
+                </div>
 
-                <Form.Item>
+                <div className="form-group button">
                   <Button type="primary" htmlType="submit" size="middle" shape="round">
                     {t("login")}
                   </Button>
                   <Link to="/register">{t("register?")}</Link>
-                </Form.Item>
-              </Form>
+                </div>
+              </form>
             </div>
-            
           </div>
         </div>
       </div>

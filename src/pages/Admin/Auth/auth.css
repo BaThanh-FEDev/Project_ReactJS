@@ -34,3 +34,10 @@
     width: 20px;
     border-radius: 50%;
 }
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Đảm bảo Spin có không gian hiển thị */
+  }
+  
