@@ -3,6 +3,7 @@ import API from "../services/api";
 import { fetchComments } from "./commentSlice";
 import detailService from "../services/detailService";
 import postService from "../services/postService";
+import { mappingPostData } from "../helpers/mapping";
 
 const initialState = {
   postsNew: [],
@@ -13,6 +14,11 @@ const initialState = {
     totalPage: null,
     currentPage: 1,
     currentLang: "",
+  },
+  postsPaging: {
+    list: [],
+    totalPage: null,
+    currentPage: 1,
   },
 
   postDetail: null,
@@ -29,7 +35,6 @@ const initialState = {
     totalPage: null,
     currentPage: 1,
   },
-  
 
   url: "",
   loading: false,
@@ -43,10 +48,11 @@ export const fetchAllPosts = createAsyncThunk(
   async (params = {}, { dispatch }) => {
     try {
       dispatch(resetAllPosts());
-      const response = await postService.getAllPosts(params)
+      const response = await postService.getAllPosts(params);
       const totalPage = parseInt(response.headers[`x-wp-totalpages`]);
+      const dataRes = response.data.map(mappingPostData);
       const data = {
-        allPostsList: response.data,
+        allPostsList: dataRes,
         totalPage,
         pageNumber: params.pageNumber,
       };
@@ -58,13 +64,12 @@ export const fetchAllPosts = createAsyncThunk(
 );
 
 export const fetchLatestPosts = createAsyncThunk(
-  `${name}/fetchLatestPosts`, 
-  async (params = {}, thunkAPI) => {
+  `${name}/fetchLatestPosts`,
+  async (params = {}) => {
     try {
-      // const { getState } = thunkAPI;
-      // const lang = getState().CATEGORY.lang;
       const response = await postService.getLatest({ ...params });
-      return response.data;
+      const data = response.data.map(mappingPostData);
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -75,8 +80,9 @@ export const fetchPopularPost = createAsyncThunk(
   `${name}/fetchPopularPost`,
   async (params = {}) => {
     try {
-      const response = await postService.getPopular({...params});
-      return response.data;
+      const response = await postService.getPopular({ ...params });
+      const data = response.data.map(mappingPostData);
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -89,8 +95,9 @@ export const fetchGeneralPost = createAsyncThunk(
     try {
       const response = await postService.getGeneral({ page: pageNumber, lang });
       const totalPage = response.headers[`x-wp-totalpages`];
+      const dataRes = response.data.map(mappingPostData);
       const data = {
-        postsGeneral: response.data,
+        postsGeneral: dataRes,
         totalPageGeneral: totalPage,
         pageNumberGeneral: pageNumber,
         lang,
@@ -103,12 +110,34 @@ export const fetchGeneralPost = createAsyncThunk(
   }
 );
 
+export const fetchPagingPost = createAsyncThunk(
+  `${name}/fetchPagingPost`,
+  async ({ pageNumber, lang }) => {
+    try {
+      const response = await postService.getGeneral({ page: pageNumber, lang });
+      const totalPage = response.headers[`x-wp-totalpages`];
+      const dataRes = response.data.map(mappingPostData);
+      const data = {
+        list: dataRes,
+        totalPage: totalPage,
+        currentPage: pageNumber,
+        lang,
+      };
+
+      return data;
+    } catch (err) {
+      console.log("err", err);
+    }
+  }
+);
+
 export const fetchRelatedPosts = createAsyncThunk(
-  `${name}/fetchRelatedPosts`, 
+  `${name}/fetchRelatedPosts`,
   async (params) => {
     try {
       const response = await postService.getRelated(params);
-      return response.data;
+      const data = response.data.map(mappingPostData);
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -119,10 +148,11 @@ export const searchPostByKeyword = createAsyncThunk(
   `${name}/searchPostByKeyword`,
   async (params) => {
     try {
-      const response = await postService.getBySearch(params)
+      const response = await postService.getBySearch(params);
       if (response) {
+        const dataRes = response.data.map(mappingPostData);
         const data = {
-          postSearch: response.data,
+          postSearch: dataRes,
           pageNumberSearch: params.pageNumber,
           totalPageSearch: parseInt(response.headers[`x-wp-totalpages`]),
         };
@@ -135,15 +165,16 @@ export const searchPostByKeyword = createAsyncThunk(
 );
 
 export const getPostDetail = createAsyncThunk(
-  `${name}/getPostDetail`, 
+  `${name}/getPostDetail`,
   async (slug, thunkAPI) => {
     try {
       const { dispatch } = thunkAPI;
       const response = await detailService.getDetail(slug);
-      const idPost = response.data[0].id;
+      const data = response.data.map(mappingPostData);
+      const idPost = data[0].id;
 
       await dispatch(fetchComments({ idPost, currentPage: 1 }));
-      return response.data[0];
+      return data[0];
     } catch (err) {
       console.log("err", err);
     }
@@ -151,11 +182,14 @@ export const getPostDetail = createAsyncThunk(
 );
 
 export const getArticleById = createAsyncThunk(
-  `${name}/getArticleById`, 
+  `${name}/getArticleById`,
   async (postId) => {
     try {
       const response = await postService.getById(postId);
-      return response.data;
+      console.log(response.data);
+      
+      const data = mappingPostData(response.data);
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -166,8 +200,9 @@ export const updateArticle = createAsyncThunk(
   "posts/updateArticle",
   async ({ postId, values }, { rejectWithValue }) => {
     try {
-      const response = await postService.updatePost({ postId, values })
-      return response.data;
+      const response = await postService.updatePost({ postId, values });
+      const data = mappingPostData(response.data);
+      return data;
     } catch (err) {
       console.error("Error updating post:", err);
       return rejectWithValue(
@@ -181,8 +216,9 @@ export const createArticle = createAsyncThunk(
   `${name}/createArticle`,
   async ({ values, lang }) => {
     try {
-      const response= await postService.createPost({values, lang})
-      return response.data;
+      const response = await postService.createPost({ values, lang });
+      const data = mappingPostData(response.data);
+      return data;
     } catch (err) {
       console.log("err:", err);
     }
@@ -221,8 +257,10 @@ export const getArticlesByCateOrTag = createAsyncThunk(
   async (params, { dispatch }) => {
     try {
       const { categories, tags } = params;
-      const response = await postService.getByCateOrTag({ categories, tags })
-      dispatch(setAllPosts(response.data));
+      const response = await postService.getByCateOrTag({ categories, tags });
+      
+      const data = response.data.map(mappingPostData);
+      dispatch(setAllPosts(data));
     } catch (err) {
       console.log("err", err);
     }
@@ -269,6 +307,15 @@ const slice = createSlice({
         state.postsGeneral.totalPage = totalPageGeneral;
         state.postsGeneral.currentPage = pageNumberGeneral;
       })
+      .addCase(fetchPagingPost.fulfilled, (state, action) => {
+        const { currentPage, list } = action.payload;
+
+        state.postsPaging = {
+          ...state.postsPaging,
+          ...action.payload,
+          list: currentPage === 1 ? list : [...state.postsPaging.list, ...list]
+        };
+      })
       .addCase(getPostDetail.fulfilled, (state, action) => {
         state.postDetail = action.payload;
       })
@@ -279,7 +326,8 @@ const slice = createSlice({
         state.postRelated = action.payload;
       })
       .addCase(searchPostByKeyword.fulfilled, (state, action) => {
-        const { postSearch, pageNumberSearch, totalPageSearch } = action.payload;
+        const { postSearch, pageNumberSearch, totalPageSearch } =
+          action.payload;
 
         state.postSearch.searchList = postSearch;
         state.postSearch.totalPage = totalPageSearch;

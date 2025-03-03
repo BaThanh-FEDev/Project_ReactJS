@@ -28,12 +28,12 @@ function ProfilePage() {
   useEffect(() => {
     if (userInforCurrent) {
       form.setFieldsValue({
-        first_name: userInforCurrent.first_name || "",
-        last_name: userInforCurrent.last_name || "",
-        nickname: userInforCurrent.nickname || "",
+        first_name: userInforCurrent.firstName || "",
+        last_name: userInforCurrent.lastName || "",
+        nickname: userInforCurrent.nickName || "",
         description: userInforCurrent.description || "",
         simple_local_avatar: {
-          media_id: userInforCurrent.simple_local_avatar.media_id || "",
+          media_id: userInforCurrent.avatarId || "",
         },
       });
     }
@@ -63,14 +63,12 @@ function ProfilePage() {
   };
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <Breadcrumb
+    <>
+       <Breadcrumb
           items={[
             { title: "Admin" },
             { title: "Thông tin cá nhân" },
-            { title: userInforCurrent?.nickname },
+            { title: userInforCurrent?.nickName },
           ]}
         />
         <div className="content">
@@ -89,7 +87,7 @@ function ProfilePage() {
                     onImageChange={(newUrl) =>
                       form.setFieldsValue({ image: newUrl })
                     }
-                    image={userInforCurrent?.simple_local_avatar?.full}
+                    image={userInforCurrent?.avatar}
                   />
                 </Form.Item>
                 <Form.Item
@@ -127,8 +125,7 @@ function ProfilePage() {
             </div>
           </div>
         </div>
-      </Content>
-    </Layout>
+    </>
   );
 }
 export default ProfilePage;

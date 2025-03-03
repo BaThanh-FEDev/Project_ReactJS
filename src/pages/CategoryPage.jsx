@@ -12,19 +12,24 @@ import { t } from "i18next";
 function CategoryPage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const lang = useSelector((state) => state.CONFIG.lang);
   const [loading, setLoading] = useState(false);
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
 
-  const { nameCategory, postListByCate, currentPage, totalPage } = useSelector(
+  const { nameCategory, postListByCate, currentPage: pageNumber, totalPage } = useSelector(
     (state) => state.CATEGORY.categoryData
   );
-  const lang = useSelector((state) => state.CONFIG.lang)
   
-
   useEffect(() => {
-    if (slug) dispatch(getCategoryBySlug({ slug, pageNumber: 1, lang }));
+    if (slug) {
+      setIsFirstLoading(true); // Bật loading khi bắt đầu fetch
+      dispatch(getCategoryBySlug({ slug, pageNumber: 1, lang })).finally(() =>
+        setIsFirstLoading(false)
+      );
+    }
   }, [slug, dispatch, lang]);
 
-  if (!postListByCate) {
+  if (isFirstLoading) {
     return (
       <div className="loading-container">
         <Spin size="large" />
@@ -34,7 +39,7 @@ function CategoryPage() {
 
   const handleLoadMore = () => {
     setLoading(true);
-    dispatch(getCategoryBySlug({ slug, pageNumber: currentPage + 1 })).finally(
+    dispatch(getCategoryBySlug({ slug, pageNumber: pageNumber + 1 })).finally(
       () => setLoading(false)
     );
   };
@@ -62,10 +67,10 @@ function CategoryPage() {
           )}
         </div>
 
-        {currentPage < totalPage && (
+        {pageNumber < totalPage && (
           <div className="text-center">
             <Button onClick={handleLoadMore} type="primary" size="large" loading={loading} disabled={loading}>
-              Tải thêm
+              {t("viewMore")}
             </Button>
           </div>
         )}

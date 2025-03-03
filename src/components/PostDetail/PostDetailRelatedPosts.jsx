@@ -8,9 +8,9 @@ function PostDetailRelatedPosts() {
     return (
       <ArticleRelated
         key={index}
-        title={item.title.rendered}
-        author={item.author_data.nickname}
-        date={item.date}
+        title={item.title}
+        author={item.authorData.nickname}
+        date={item.publishDate}
         link={item.link}
       />
     );

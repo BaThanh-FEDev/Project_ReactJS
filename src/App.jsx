@@ -23,7 +23,8 @@ import ArticleEditPage from "./pages/Admin/Articles/ArticlesEditPage";
 import Dashboard from "./pages/Admin/Auth";
 import { fetchTagsName } from "./store/tagsSlice";
 import { Spin } from "antd";
-import "./assets/css/main.css"
+import "./assets/css/main.css";
+import AdminRoute from "./pages/Admin/AdminRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,68 +32,84 @@ function App() {
   const lang = useSelector((state) => state.CONFIG.lang);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    dispatch(userGetInfor());
-    dispatch(fetchCategory());
-    dispatch(fetchTagsName())
-  }, [dispatch, lang]);
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     await Promise.all([
-  //       dispatch(userGetInfor()),
-  //       dispatch(fetchCategory()),
-  //       dispatch(fetchTagsName()),
-  //     ]);
-  //     setIsLoading(false);
-  //   };
-  //   fetchData();
+  //   dispatch(userGetInfor());
+  //   dispatch(fetchCategory());
+  //   dispatch(fetchTagsName());
   // }, [dispatch, lang]);
 
-  const routes = [
-    { path: "/", element: () => <HomePage /> },
-    { path: "login", element: () => <LoginPage /> },
-    { path: "register", element: () => <RegisterPage /> },
-    { path: "search", element: () => <SearchPage /> },
-    { path: "post/:slug", element: () => <PostDetailPage /> },
-    { path: "category/:slug", element: () => <CategoryPage /> },
-    { path: "tag/:slug", element: () => <TagsPage /> },
-    { path: "abc", element: () => <NotFoundPage /> },
-    { path: "admin/dashboard", element: () => <Dashboard/> },
-    { path: "admin/profile", element: () => <ProfilePage /> },
-    { path: "admin/changepassword", element: () => <ChangePassword /> },
-    { path: "admin/articles", element: () => <ArticlesPage /> },
-    { path: "admin/articles/create", element: () => <ArticleCreatePage /> },
-    { path: "admin/articles/:id/edit", element: () => <ArticleEditPage /> },
-    { path: "admin/categories", element: () => <CategoriesIndexPage /> },
-    { path: "admin/tags", element: () => <TagsIndexPage /> },
-    { path: "*", element: () => <NotFoundPage /> },
-  ];
-  
-  const isAdminRoute = location.pathname.startsWith('/admin');
-  const isNotFoundRoute = !routes.some(route => route.path === location.pathname);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        dispatch(userGetInfor()),
+        dispatch(fetchCategory()),
+        dispatch(fetchTagsName()),
+      ]);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [dispatch, lang]);
+
+  const routesX = {
+    publicRoute: [
+      { path: "/", element: () => <HomePage /> },
+      { path: "login", element: () => <LoginPage /> },
+      { path: "register", element: () => <RegisterPage /> },
+      { path: "search", element: () => <SearchPage /> },
+      { path: "post/:slug", element: () => <PostDetailPage /> },
+      { path: "category/:slug", element: () => <CategoryPage /> },
+      { path: "tag/:slug", element: () => <TagsPage /> },
+      { path: "abc", element: () => <NotFoundPage /> },
+    ],
+    adminRoute: [
+      { path: "admin/dashboard", element: () => <Dashboard /> },
+      { path: "admin/profile", element: () => <ProfilePage /> },
+      { path: "admin/changepassword", element: () => <ChangePassword /> },
+      { path: "admin/articles", element: () => <ArticlesPage /> },
+      { path: "admin/articles/create", element: () => <ArticleCreatePage /> },
+      { path: "admin/articles/:id/edit", element: () => <ArticleEditPage /> },
+      { path: "admin/categories", element: () => <CategoriesIndexPage /> },
+      { path: "admin/tags", element: () => <TagsIndexPage /> },
+    ],
+    otherRoute: [{ path: "*", element: () => <NotFoundPage /> }],
+  };
+
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isNotFoundRoute = !Object.values(routesX)
+    .flat()
+    .some((route) => route.path === location.pathname);
 
   return (
     <div className="wrapper-content">
-      {!isAdminRoute && <Header />}
-      {/* {isLoading ? (
+      {isLoading ? (
         <div className="loading-container">
           <Spin size="large" />
         </div>
       ) : (
-        <Routes>
-          {routes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
-          ))}
-        </Routes>
-      )} */}
-      <Routes>
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.element()} />
-        ))}
-      </Routes>
-      {!isAdminRoute && <Footer />}
-      <div className="spacing" />
+        <>
+          {!isAdminRoute && <Header />}
+          <Routes>
+            {routesX.publicRoute.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element()} />
+            ))}
+            <Route element={<AdminRoute />}>
+              {routesX.adminRoute.map((route, index) => (
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={route.element()}
+                />
+              ))}
+            </Route>
+            {routesX.otherRoute.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element()} />
+            ))}
+          </Routes>
+          {!isAdminRoute && <Footer />}
+          <div className="spacing" />
+        </>
+      )}
     </div>
   );
 }

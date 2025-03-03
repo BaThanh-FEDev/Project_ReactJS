@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import categoryService from "../services/categoryService";
 import postService from "../services/postService";
+import { mappingCategoryData, mappingPostData } from "../helpers/mapping";
 
 const initialState = {
   categoryList: [],
@@ -30,11 +31,12 @@ export const fetchCategory = createAsyncThunk(
   async (newCategory) => {
     try {
       const response = await categoryService.getAllCategories();
+      const dataRes = response.data.map(mappingCategoryData)
       if (newCategory) {
-        const data = [...response.data, ...newCategory];
+        const data = [...dataRes, ...newCategory];
         return data;
       } else {
-        return response.data;
+        return dataRes;
       }
     } catch (err) {
       console.log("err", err);
@@ -47,26 +49,32 @@ export const getCategoryBySlug = createAsyncThunk(
   async ({ slug, pageNumber, lang }) => {
     try {
       const response = await categoryService.getCategoryBySlug({ slug, lang});
-      if (response.data) {
-        const categoryIdBySlug = response.data[0].id;
+      
+      if (response.data[0]) {
+        const dataRes = mappingCategoryData(response.data[0])
+        const categoryIdBySlug = dataRes.id;
         const responsePost = await postService.getByCategory({
           id: categoryIdBySlug,
           page: pageNumber,
         });
+        const posts = responsePost.data || [];
         
         const data = {
-          nameCategory: response.data[0].name || slug,
-          postListByCate: responsePost.data || [],
-          pageNumber,
-          totalPageCate: parseInt(responsePost.headers[`x-wp-totalpages`]),
+          nameCategory: dataRes.name || slug,
+          postListByCate: posts.map(mappingPostData),
+          currentPage: pageNumber,
+          totalPage: parseInt(responsePost.headers[`x-wp-totalpages`]),
         };
         return data;
       }
+      else {
+        return {
+          nameCategory: slug, // Nếu có lỗi, vẫn trả về slug làm nameCategory
+        };
+      }
     } catch (err) {
       console.log("err", err);
-      return {
-        nameCategory: slug, // Nếu có lỗi, vẫn trả về slug làm nameCategory
-      };
+      
     }
   }
 );
@@ -78,8 +86,8 @@ export const createCategory = createAsyncThunk(
       const response = await categoryService.createCategory(categoryData);
       // thunkAPI.dispatch(fetchCategory());
       thunkAPI.dispatch(fetchCatesAdminWithPaging());
-
-      return response.data;
+      const data = mappingCategoryData(response.data)      
+      return data;
     } catch (err) {
       return {
         status: false,
@@ -94,7 +102,8 @@ export const getCategoryById = createAsyncThunk(
   async (categoryId) => {
     try {
       const response = await categoryService.getCategoryById(categoryId);
-      return response.data;
+      const data = mappingCategoryData(response.data)
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -110,7 +119,8 @@ export const updateCategory = createAsyncThunk(
         values,
       });
       thunkAPI.dispatch(fetchCatesAdminWithPaging());
-      return response.data;
+      const data = mappingCategoryData(response.data)
+      return data;
     } catch (err) {
       console.error("Error updating post:", err);
     }
@@ -153,7 +163,7 @@ export const fetchCatesAdminWithPaging = createAsyncThunk(
       const response = await categoryService.getAllCateInAdmin(params)
       const total = parseInt(response.headers["x-wp-total"], 10);
       const totalPage = parseInt(response.headers["x-wp-totalpages"]);
-      const data = response.data;
+      const data = response.data.map(mappingCategoryData);
       return {
         listCates: data,
         total,
@@ -178,22 +188,12 @@ const slice = createSlice({
       })
 
       .addCase(getCategoryBySlug.fulfilled, (state, action) => {
-        const { nameCategory, totalPageCate, pageNumber, postListByCate } =
-          action.payload;
-
-        if (!Array.isArray(postListByCate)) {
-          // Nếu không có postListByCate, gán lại mảng rỗng
-          state.categoryData.postListByCate = [];
-        } else {
-          // Nếu có postListByCate hợp lệ, cập nhật lại nó
-          state.categoryData.postListByCate =
-            pageNumber === 1
-              ? postListByCate
-              : [...state.categoryData.postListByCate, ...postListByCate];
+        const { currentPage, postListByCate } = action.payload;
+        state.categoryData = {
+          ...state.categoryData,
+          ...action.payload,
+          postListByCate: currentPage === 1? postListByCate : [...state.categoryData.postListByCate, ...postListByCate]
         }
-        state.categoryData.nameCategory = nameCategory || "Default Category";
-        state.categoryData.totalPage = totalPageCate;
-        state.categoryData.currentPage = pageNumber;
       })
 
       .addCase(getCategoryById.fulfilled, (state, action) => {

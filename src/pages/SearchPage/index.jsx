@@ -9,10 +9,14 @@ import "./search.css";
 import { t } from "i18next";
 
 function SearchPage() {
-  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-
   const valueSearch = searchParams.get("keyword");
+
+  const dispatch = useDispatch();
+  const lang = useSelector((state) => state.CONFIG.lang)
+   const [loading, setLoading] = useState(false);
+  
+
   const {
     searchList,
     currentPage: pageNumber,
@@ -23,9 +27,9 @@ function SearchPage() {
     if (valueSearch === "") {
       message.warning("Mời nhập từ khóa tìm kiếm");
     } else {
-      dispatch(searchPostByKeyword({ valueSearch, pageNumber: 1 }));
+      dispatch(searchPostByKeyword({ valueSearch, pageNumber: 1, lang }));
     }
-  }, [valueSearch, dispatch]);
+  }, [valueSearch, dispatch, lang]);
 
   const hiddenPagination = searchList.length === 0 ? "hidden" : "";
   const paginationArray = useMemo(() => {

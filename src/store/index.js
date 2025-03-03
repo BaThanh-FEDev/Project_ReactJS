@@ -6,6 +6,7 @@ import userReducer from "./userSlice"
 import menuReducer from "./menuSlice"
 import commentReducer from "./commentSlice"
 import configReducer from "./configSlice"
+import fetchActionReducer from "./fetchAction"
 
 const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
         MENU: menuReducer,
         USER: userReducer,
         COMMENT: commentReducer,
-        CONFIG: configReducer
+        CONFIG: configReducer,
+        fetchAction: fetchActionReducer,
     },
 })
 

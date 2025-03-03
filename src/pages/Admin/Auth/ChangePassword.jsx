@@ -26,10 +26,8 @@ function ChangePassword() {
   };
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <Breadcrumb
+    <>
+      <Breadcrumb
           items={[
             { title: "Admin" },
             { title: "Đổi mật khẩu" },
@@ -95,8 +93,7 @@ function ChangePassword() {
             </div>
           </div>
         </div>
-      </Content>
-    </Layout>
+    </>
   );
 }
 export default ChangePassword;

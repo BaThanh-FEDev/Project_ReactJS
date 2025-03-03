@@ -43,7 +43,7 @@ function ArticlesPage() {
   }, [allPostsList]);
 
   useEffect(() => {
-    dispatch(fetchAllPosts({ pageNumber: 1}));
+    dispatch(fetchAllPosts({ pageNumber: 1 }));
   }, [dispatch]);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -135,24 +135,35 @@ function ArticlesPage() {
       ),
   });
 
-  const renderTagsOrCategories = (items) =>
-    items?.map((item) => (
-      <Tag
-        color={
-          item.length > 5
-            ? "yellow"
-            : item.toLowerCase() === "fe"
-            ? "red"
-            : "green"
-        }
-        key={item}
-      >
-        {item.toUpperCase()}
-      </Tag>
-    ));
+  const renderTagsOrCategories = (items) => {
+
+    return items?.map((item) => {
+
+      return (
+        <Tag
+          color={
+            item.length > 5
+              ? "yellow"
+              : item.toLowerCase() === "fe"
+              ? "red"
+              : "green"
+          }
+          key={item}
+        >
+          {item.toUpperCase()}
+        </Tag>
+      );
+    });
+  };
 
   const columns = [
-    { key: "id", title: "ID", dataIndex: "id", width: "5%", ...getColumnSearchProps("id"), },
+    {
+      key: "id",
+      title: "ID",
+      dataIndex: "id",
+      width: "5%",
+      ...getColumnSearchProps("id"),
+    },
     {
       key: "image",
       title: "Image",
@@ -160,7 +171,7 @@ function ArticlesPage() {
       width: "15%",
       render: (image) => (
         <img
-          src={typeof image === 'string' && image.trim() ? image : undefined}
+          src={typeof image === "string" && image.trim() ? image : undefined}
           alt="featured"
           style={{ width: 100, height: 100, objectFit: "cover" }}
         />
@@ -212,20 +223,19 @@ function ArticlesPage() {
   const dataSource = filteredPosts.map((item, index) => ({
     key: index,
     id: item.id,
-    image: item.featured_media_url,
-    title: item.title.rendered,
+    image: item.image,
+    title: item.title,
     categories: categoryList
-      .filter((cat) => item.categories.includes(cat.id))
+      .filter((cat) => item.categoryIds.includes(cat.id))
       .map((cat) => cat.name),
     tags: tagsList
-      .filter((tag) => item.tags.includes(tag.id))
+      .filter((tag) => item.tagsIds.includes(tag.id))
       .map((tag) => tag.name),
     status: item.status.toUpperCase(),
   }));
 
   const [selectedArticleIds, setSelectedArticleIds] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
 
   const handleSelectIdArticles = (ids) => {
     setSelectedArticleIds(ids);
@@ -239,13 +249,13 @@ function ArticlesPage() {
   };
 
   const rowSelection = {
-    selectedRowKeys, 
+    selectedRowKeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => ({
-      disabled: record.status === 'DISABLED',
+      disabled: record.status === "DISABLED",
     }),
   };
-  
+
   const navigate = useNavigate();
   function handleEdit(id, event) {
     event.preventDefault();
@@ -257,7 +267,7 @@ function ArticlesPage() {
     dispatch(deleteArticle(id))
       .then(() => {
         message.success("Xóa bài viết thành công!");
-        dispatch(fetchAllPosts({ pageNumber: currentPage}));
+        dispatch(fetchAllPosts({ pageNumber: currentPage }));
       })
       .catch(() => {
         message.error("Xóa bài viết thất bại!");
@@ -265,37 +275,34 @@ function ArticlesPage() {
   }
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <div className="navArticle">
-          <Breadcrumb
-            items={[{ title: "Admin" }, { title: "Danh sách bài viết" }]}
-          />
-          <div className="createButtonWrapper">
+    <>
+      <div className="navArticle">
+        <Breadcrumb
+          items={[{ title: "Admin" }, { title: "Danh sách bài viết" }]}
+        />
+        <div className="createButtonWrapper">
           <Link to="/admin/articles/create" className="createButton">
             Create New Article
           </Link>
         </div>
-        </div>
-        
-        <div className="content">
-          <ArticlesControl 
-            selectedArticleIds={selectedArticleIds}
-            setSelectedRowKeys={setSelectedRowKeys} 
-            setSelectedArticleIds={setSelectedArticleIds}
-           />
-          <Table
-            key={tableKey}
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={dataSource}
-            pagination={false}
-          />
-          {allPostsList.length > 0 && <Pagination />}
-        </div>
-      </Content>
-    </Layout>
+      </div>
+
+      <div className="content">
+        <ArticlesControl
+          selectedArticleIds={selectedArticleIds}
+          setSelectedRowKeys={setSelectedRowKeys}
+          setSelectedArticleIds={setSelectedArticleIds}
+        />
+        <Table
+          key={tableKey}
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+        />
+        {allPostsList.length > 0 && <Pagination />}
+      </div>
+    </>
   );
 }
 

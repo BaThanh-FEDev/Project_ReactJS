@@ -28,5 +28,6 @@
   "infor": "Profile",
   "changepw": "Change passowrd",
   "add": "Add article",
-  "list": "List articles"
+  "list": "List articles",
+  "myArticles": "My articles"
 }

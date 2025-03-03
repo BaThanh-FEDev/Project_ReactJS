@@ -3,11 +3,11 @@ import { formattedDate } from "../../helpers/myDayjs";
 
 function ArticleRelated({ title, author, date, link }) {
   const dateFormatted = formattedDate(date)
-  let newLink = link.replace("https://wp-api.codethanhthuongthua.asia/2020/08/08/", "/post/")
+  // let newLink = link.replace("https://wp-api.codethanhthuongthua.asia/2020/08/08/", "/post/")
 
   return (
     <article className="related-post__card">
-      <a href={newLink} className="related-post__title">
+      <a href="#" className="related-post__title">
         {title}
       </a>
       <div className="related-post__info">

@@ -5,11 +5,11 @@ function PostDetailHead() {
   const postDetail = useSelector((state) => state.POST.postDetail);
   if (!postDetail) return <></>;
 
-  const title = postDetail.title.rendered;
-  const author = postDetail.author_data.nickname;
-  const date = formattedDate(postDetail.date);
-  const viewCount = postDetail.view_count;
-  const commentCount = postDetail.comment_count;
+  const title = postDetail.title;
+  const author = postDetail.authorData.nickname;
+  const date = formattedDate(postDetail.publishDate);
+  const viewCount = postDetail.viewCount;
+  const commentCount = postDetail.commentCount;
 
   return (
     <div className="post-detail__head">

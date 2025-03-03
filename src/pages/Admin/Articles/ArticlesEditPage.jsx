@@ -41,17 +41,21 @@ const ArticleEditPage = () => {
   const categoryList = useSelector((state) => state.CATEGORY.categoryList);
   const [form] = Form.useForm();
   const [image, setImage] = useState(null);
+  const [clearImage, setClearImage] = useState(false);
   
   useEffect(() => {
     if (postDetailEdit) {
+      console.log(postDetailEdit);
+      
       form.setFieldsValue({
         id: postDetailEdit.id,
-        title: postDetailEdit.title?.rendered,
-        content: postDetailEdit.content?.rendered,
-        categories: postDetailEdit.categories || [],
-        tags: postDetailEdit.tags || [],
+        title: postDetailEdit.title,
+        content: postDetailEdit.content,
+        categories: postDetailEdit.categoryIds|| [],
+        tags: postDetailEdit.
+        tagsIds || [],
         status: postDetailEdit.status || "",
-        image: postDetailEdit.featured_media_url || "",
+        image: postDetailEdit.image || "",
       });
     }
   }, [form, postDetailEdit]);
@@ -93,6 +97,8 @@ const ArticleEditPage = () => {
       });
       navigate("/admin/articles");
     });
+    setClearImage(true);
+    setTimeout(() => setClearImage(false), 100);
   };
 
   const getOptions = (list) =>
@@ -103,10 +109,8 @@ const ArticleEditPage = () => {
   };
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <Breadcrumb items={[{ title: "Admin" }, { title: "Sửa bài viết" }]} />
+    <>
+    <Breadcrumb items={[{ title: "Admin" }, { title: "Sửa bài viết" }]} />
         <div className="content">
           <div className="tcl-row">
             <div className="tcl-col-12 tcl-col-sm-6 block-center">
@@ -177,7 +181,8 @@ const ArticleEditPage = () => {
 
                 <Form.Item label="Upload Image" name="image">
                   <ImageUpload
-                    image={postDetailEdit.featured_media_url}
+                    clearImage={clearImage}
+                    image={postDetailEdit.image}
                     onImageChange={handleImageChange}
                     reviceImage={setImage}
                   />
@@ -199,8 +204,7 @@ const ArticleEditPage = () => {
             </div>
           </div>
         </div>
-      </Content>
-    </Layout>
+    </>
   );
 };
 

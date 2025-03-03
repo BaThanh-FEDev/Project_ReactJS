@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { TOKEN } from "../services/api";
 import authService from "../services/authService";
+import { mappingProfileData } from "../helpers/mapping";
 
 const initialState = {
   nickName: "Tài khoản",
@@ -75,9 +76,10 @@ export const userUpdateInfor = createAsyncThunk(
   async (dataUpdate) => {
     try {
       const response = await authService.updateInfor(dataUpdate);
+      const data = mappingProfileData(response.data)
       return {
         status: true,
-        data: response.data,
+        data: data,
       };
     } catch (err) {
       return {
@@ -92,7 +94,8 @@ export const userGetInfor = createAsyncThunk(
   async (token) => {
     try {
       const response = await authService.getInfor(token);
-      return response.data;
+      const data = mappingProfileData(response.data)
+      return data;
     } catch (err) {
       localStorage.removeItem(TOKEN);
     }
@@ -103,8 +106,7 @@ export const userUpdateAvatar = createAsyncThunk(
   `${name}/userUpdateAvatar`,
   async (mediaId) => {
     try {
-      const response = await authService.uploadMedia(mediaId);
-      // return response
+      await authService.uploadMedia(mediaId);
     } catch (err) {
       console.log("err", err);
     }

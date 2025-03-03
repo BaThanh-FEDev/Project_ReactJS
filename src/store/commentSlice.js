@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/commentService";
+import { mappingCommentData } from "../helpers/mapping";
 
 const initialState = {
   commentData: {
@@ -20,10 +21,11 @@ export const fetchComments = createAsyncThunk(
   `${name}/fetchComments`, // action type
   async (params) => {
     try {
-      const response = await commentService.getComments(params)
+      const response = await commentService.getComments(params);
+      const dataRes = response.data.map(mappingCommentData)
 
       const data = {
-        commentList: response.data,
+        commentList: dataRes,
         currentPage: params.currentPage,
         totalComment: parseInt(response.headers[`x-wp-total`]),
       };
@@ -39,7 +41,8 @@ export const fetchChildComments = createAsyncThunk(
   async (params) => {
     try {
       const response = await commentService.getChildComments(params);
-      return response.data;
+      const data = response.data.map(mappingCommentData)
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -51,7 +54,8 @@ export const postNewOrReplayComment = createAsyncThunk(
   async (data) => {
     try {
       const response = await commentService.postNewOrReplay(data);
-      return response.data;
+      const dataRes = mappingCommentData(response.data)
+      return dataRes;
     } catch (err) {
       console.log("err", err);
     }

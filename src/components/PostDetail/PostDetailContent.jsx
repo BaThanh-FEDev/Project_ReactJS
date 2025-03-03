@@ -9,14 +9,14 @@ function PostDetailContent() {
   const postDetail = useSelector((state) => state.POST.postDetail);
   if (!postDetail) return <></>;
 
-  const image = postDetail.featured_media_url;
-  const content = postDetail.content.rendered;
-  const tags = postDetail.tags;
-  const avatar = postDetail.author_data.avatar;
-  const excerpt = postDetail.excerpt.rendered;
-  const modifiedTime = formattedDate(postDetail.modified);
-  const commentCount = postDetail.comment_count;
-  const commentName = postDetail.author_data.nickname;
+  const image = postDetail.image;
+  const content = postDetail.content;
+  const tags = postDetail.tagsIds;
+  const avatar = postDetail.authorData.avatar;
+  const excerpt = postDetail.description;
+  const modifiedTime = formattedDate(postDetail.publishDate);
+  const commentCount = postDetail.commentCount;
+  const commentName = postDetail.authorData.nickname;
 
   return (
     <div className="post-detail__content">

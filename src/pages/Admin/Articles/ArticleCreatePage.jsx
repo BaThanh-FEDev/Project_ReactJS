@@ -3,14 +3,12 @@ import {
   Button,
   Form,
   Input,
-  Layout,
   message,
   Radio,
   Select,
-  Typography,
+  Typography
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Content } from "antd/es/layout/layout";
 import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,10 +18,7 @@ import imageService from "../../../services/mediaService";
 import { createArticle } from "../../../store/postSlice";
 import "../admin.css";
 import ImageUpload from "../Media/ImageUpload";
-import Sidebar from "../Sidebar";
 import "./articles.css";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 function ArticleCreatePage() {
   useNotAuthenticate();
@@ -33,6 +28,7 @@ function ArticleCreatePage() {
   const lang = useSelector((state) => state.CONFIG.lang);
   const [form] = Form.useForm();
   const [image, setImage] = useState(null);
+  const [isClearImage, setIsClearImage] = useState(false);
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
@@ -93,7 +89,7 @@ function ArticleCreatePage() {
           status: "",
           featured_media: null,
         });
-        setImage(null);
+        setIsClearImage(true);
         message.success("Thêm mới bài viết thành công");
         navigate("/admin/articles");
       });
@@ -104,10 +100,8 @@ function ArticleCreatePage() {
   const handleImageChange = (newUrl) => form.setFieldsValue({ image: newUrl });
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <Breadcrumb
+    <>
+    <Breadcrumb
           items={[{ title: "Admin" }, { title: "Thêm mới bài viết" }]}
         />
         <div className="content">
@@ -136,28 +130,6 @@ function ArticleCreatePage() {
                 >
                   <TextArea rows={5} />
                 </Form.Item>
-
-                {/* ckeditor */}
-                {/* <Form.Item
-                  label="Mô tả"
-                  name="content"
-                  rules={[{ required: true, message: "Mời nhập mô tả!" }]}
-                >
-                  {({ field: { onChange, value } }) => (
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={value || ""}
-                      onChange={(event, editor) => {
-                        const data = editor.getData();
-                        onChange(data);
-                      }}
-                      onBlur={(event, editor) => {
-                        const data = editor.getData();
-                        onChange(data); // cập nhật giá trị khi blur
-                      }}
-                    />
-                  )}
-                </Form.Item> */}
 
                 <Form.Item
                   label="Categories"
@@ -199,6 +171,7 @@ function ArticleCreatePage() {
                     value={image}
                     reviceImage={setImage}
                     onImageChange={handleImageChange}
+                    clearImage={isClearImage}
                   />
                 </Form.Item>
 
@@ -211,8 +184,7 @@ function ArticleCreatePage() {
             </div>
           </div>
         </div>
-      </Content>
-    </Layout>
+    </>
   );
 }
 

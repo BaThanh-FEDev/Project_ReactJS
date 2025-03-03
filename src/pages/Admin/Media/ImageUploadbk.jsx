@@ -18,7 +18,7 @@ const ImageUpload = ({ image, onImageChange, reviceImage, clearImage }) => {
   useEffect(() => {
     setFileList(image ? [{ uid: "-1", name: "uploaded-image", status: "done", url: image }] : []);
   }, [image]);
-
+  
   useEffect(() => {
     if (clearImage) {
       setPreviewOpen(false);
@@ -26,6 +26,7 @@ const ImageUpload = ({ image, onImageChange, reviceImage, clearImage }) => {
       setFileList([]);
     }
   }, [clearImage]);
+  
 
   const uploadImage = async (file) => {
     const formData = new FormData();
@@ -41,9 +42,9 @@ const ImageUpload = ({ image, onImageChange, reviceImage, clearImage }) => {
     // }
   };
 
+
   const handleChangeUpload = async ({ file, fileList }) => {
     setFileList(fileList);
-
     if (file.status === "removed") {
       onImageChange(null);
       return;
@@ -52,8 +53,12 @@ const ImageUpload = ({ image, onImageChange, reviceImage, clearImage }) => {
     if (file) {
       const uploadedUrl = await uploadImage(file);
       if (uploadedUrl) {
+        // resetPage();
         onImageChange(uploadedUrl);
-        message.success("Tải ảnh lên thành công!");
+        // message.success("Tải ảnh lên thành công!");
+        // console.log('remove')
+        // setFileList([]);
+        // setPreviewImage(null);
       }
     }
   };

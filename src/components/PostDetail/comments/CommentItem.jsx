@@ -13,9 +13,10 @@ function CommentItem(props) {
   const postDetail = useSelector((state) => state.POST.postDetail);
 
   const { item } = props;
-  const {id, content, author_data: authorData, date, comment_reply_count: commentReplyCount,} = item;
-  const { avatar, nickname: nickName } = authorData;
-  const contentRendered = content.rendered.replace("<p>", "").replace("</p>", "");
+  const {id, content, authorData, date, commentReplyCount} = item;
+  const { avatar, nickName } = authorData || {};
+  
+  const contentRendered = content.replace("<p>", "").replace("</p>", "");
   const dateFormatted = formattedDate(date);
   
   const commentReplayList = useSelector((state) => state.COMMENT.commentReplayList);
@@ -28,6 +29,8 @@ function CommentItem(props) {
   const totalRepliesLoaded = commentReplayList.filter(childItem => childItem.parent === id).length;
   const isShowLoadMore = commentReplyCount > 0 && totalRepliesLoaded < commentReplyCount;
 
+  
+  
   
 
   function handleLoadReplayComments(e) {

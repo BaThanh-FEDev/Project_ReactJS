@@ -76,6 +76,7 @@ const postService = {
       per_page: 1,
       page: params.pageNumber,
       search: params.valueSearch,
+      lang: params.lang
     });
   },
 

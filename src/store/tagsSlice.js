@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import postService from "../services/postService";
 import tagService from "../services/tagService";
+import { mappingPostData, mappingTagsData } from "../helpers/mapping";
 
 const initialState = {
   tagsListOfPost: [],
@@ -24,7 +25,7 @@ const initialState = {
     currentPage: 1,
   },
 };
-
+ 
 const name = "tags";
 
 export const fetchTagsName = createAsyncThunk(
@@ -32,7 +33,8 @@ export const fetchTagsName = createAsyncThunk(
   async () => {
     try {
       const response = await tagService.getAllTag();
-      return response.data;
+      const data = response.data.map(mappingTagsData)
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -44,7 +46,9 @@ export const getTagsByIdPost = createAsyncThunk(
   async (postId) => {
     try {
       const response = await tagService.getByIdPost(postId);
-      return response.data;
+      const data = response.data.map(mappingTagsData);
+      
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -57,26 +61,30 @@ export const getPostByTags = createAsyncThunk(
     try {
       const response = await tagService.getTagBySlug({ slug, lang });
 
-      if (response.data) {
-        const tagIdBySlug = response.data[0].id;
+      if (response.data[0]) {
+        const dataRes = mappingTagsData(response.data[0]) 
+        const tagIdBySlug = dataRes.id;
         const responsePost = await postService.getByTag({
           id: tagIdBySlug,
           page: pageNumber,
         });
-
+        const posts = responsePost.data || []
         const data = {
-          nameTag: response.data[0].name || slug,
-          postListByTag: responsePost.data || [],
-          pageNumber,
-          totalPageTag: parseInt(responsePost.headers[`x-wp-totalpages`]),
+          nameTag: dataRes.name || slug,
+          postListByTag: posts.map(mappingPostData),
+          currentPage: pageNumber,
+          totalPage: parseInt(responsePost.headers[`x-wp-totalpages`]),
         };
         return data;
       }
+      else {
+        return {
+          nameTag: slug, // Nếu có lỗi, vẫn trả về slug làm nameTag
+        };
+      }
     } catch (err) {
       console.log("err", err);
-      return {
-        nameTag: slug, // Nếu có lỗi, vẫn trả về slug làm nameTag
-      };
+      
     }
   }
 );
@@ -87,10 +95,11 @@ export const createTag = createAsyncThunk(
     try {
       const { dispatch } = thunkAPI;
       const response = await tagService.createTag({ tagData });
+      const data = mappingTagsData(response.data)
 
       // dispatch(fetchTagsName());
       dispatch(fetchTagsAdminWithPaging());
-      return response.data;
+      return data;
     } catch (err) {
       return {
         status: false,
@@ -105,7 +114,8 @@ export const getTagById = createAsyncThunk(
   async (tagId) => {
     try {
       const response = await tagService.getTagById(tagId);
-      return response.data;
+      const data = mappingTagsData(response.data);
+      return data;
     } catch (err) {
       console.log("err", err);
     }
@@ -117,7 +127,8 @@ export const updateTag = createAsyncThunk(
   async ({ tagId, values }) => {
     try {
       const response = await tagService.updateTag({ tagId, values });
-      return response.data;
+      const data = mappingTagsData(response.data);
+      return data;
     } catch (err) {
       console.error("Error updating post:", err);
     }
@@ -128,12 +139,10 @@ export const deleteTag = createAsyncThunk(
   `${name}/deleteTag`,
   async (tagId, thunkAPI) => {
     try {
-      const response = await tagService.deleteTag(tagId);
+      await tagService.deleteTag(tagId);
 
       // thunkAPI.dispatch(fetchTagsName());
       thunkAPI.dispatch(fetchTagsAdminWithPaging());
-
-      return response.data;
     } catch (err) {
       console.log("err", err);
     }
@@ -163,9 +172,9 @@ export const fetchTagsAdminWithPaging = createAsyncThunk(
       const response = await tagService.getAllTagInAdmin(params)
       const total = parseInt(response.headers["x-wp-total"], 10);
       const totalpages = parseInt(response.headers["x-wp-totalpages"]);
-      const data = response.data;
+      const dataRes = response.data.map(mappingTagsData);
       return {
-        listTags: data,
+        listTags: dataRes,
         total,
         currentPage: page,
         totalpages,
@@ -188,22 +197,12 @@ const slice = createSlice({
         state.isLoading = false;
       })
       .addCase(getPostByTags.fulfilled, (state, action) => {
-        const { nameTag, totalPageTag, pageNumber, postListByTag } =
-          action.payload;
-
-        if (!Array.isArray(postListByTag)) {
-          // Nếu không có postListByTag, gán lại mảng rỗng
-          state.tagData.postListByTag = [];
-        } else {
-          // Nếu có postListByTag hợp lệ, cập nhật lại nó
-          state.tagData.postListByTag =
-            pageNumber === 1
-              ? postListByTag
-              : [...state.tagData.postListByTag, ...postListByTag];
+        const { currentPage, postListByTag } = action.payload;
+        state.tagData = {
+          ...state.tagData,
+          ...action.payload,
+          postListByTag: currentPage === 1? postListByTag : [...state.tagData.postListByTag, ...postListByTag]
         }
-        state.tagData.nameTag = nameTag || "Default Tag";
-        state.tagData.totalPage = totalPageTag;
-        state.tagData.currentPage = pageNumber;
       })
 
       .addCase(fetchTagsName.fulfilled, (state, action) => {
@@ -219,11 +218,6 @@ const slice = createSlice({
         if (state.tagEdit?.id === updateTag.id) {
           state.tagEdit = updateTag;
         }
-
-        // Cập nhật bài viết trong danh sách bài viết (nếu có)
-        // state.tagsListAll = state.tagsListAll.map((tag) =>
-        //   tag.id === updateTag.id ? updateTag : tag
-        // );
         state.tagsData.listTags = state.tagsData.listTags.map((tag) =>
           tag.id === updateTag.id ? updateTag : tag
         );

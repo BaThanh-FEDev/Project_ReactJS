@@ -1,55 +1,25 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchGeneralPost } from "../../store/postSlice";
-import ArticleItem from "../ArticleItem";
-import Button from "../shared/Button";
-import MainTitle from "../shared/MainTitle";
 import { t } from "i18next";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { usePostsPaging } from "../../hooks/usePostsPaging";
+import { fetchPagingPost } from "../../store/postSlice";
+import ArticleItem from "../ArticleItem";
+import MainTitle from "../shared/MainTitle";
 
 function ArticleGeneral() {
   const dispatch = useDispatch();
-  const lang = useSelector((state) => state.CONFIG.lang);
-  const postsGeneral = useSelector(
-    (state) => state.POST.postsGeneral.postsList
-  );
-  const pageNumber = useSelector(
-    (state) => state.POST.postsGeneral.currentPage
-  );
-  const totalPage = parseInt(
-    useSelector((state) => state.POST.postsGeneral.totalPage)
-  );
-  const [loading, setLoading] = useState(false);
+  const { lang, posts, showButtonLoadMore } = usePostsPaging();
 
   useEffect(() => {
-    dispatch(fetchGeneralPost({ pageNumber, lang }));
+    dispatch(fetchPagingPost({ pageNumber: 1, lang }));
   }, [lang]);
-
-  function handleLoadMore() {
-    setLoading(true);
-    dispatch(fetchGeneralPost({ pageNumber: pageNumber + 1, lang })).then(
-      () => {
-        setLoading(false);
-      }
-    );
-  }
-  const buttonLoadMore = pageNumber !== totalPage && (
-    <Button
-      onClick={handleLoadMore}
-      type="primary"
-      size="large"
-      loading={loading}
-      disabled={loading}
-    >
-      {t("viewMore")}
-    </Button>
-  );
 
   return (
     <div className="articles-list section">
       <div className="tcl-container">
         <MainTitle>{t("generalArticles")}</MainTitle>
         <div className="tcl-row">
-          {postsGeneral.map((item, index) => {
+          {posts.map((item, index) => {
             return (
               <div key={index} className="tcl-col-12 tcl-col-md-6">
                 <ArticleItem isStyleCard isShowAvatar={false} data={item} />
@@ -57,7 +27,7 @@ function ArticleGeneral() {
             );
           })}
         </div>
-        <div className="text-center">{buttonLoadMore}</div>
+        <div className="text-center">{showButtonLoadMore()}</div>
       </div>
     </div>
   );

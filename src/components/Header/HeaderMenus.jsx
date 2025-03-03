@@ -92,8 +92,8 @@ function HeaderMenus() {
       dispatch(userGetInfor(token));
     }
   }, []);
-  const userAvatar = userInforCurrent?.simple_local_avatar?.full || "";
-
+  const userAvatar = userInforCurrent?.avatar;
+  const { t, i18n } = useTranslation();
   const newXhtml = menuItem.map(renderMenus);
 
   useEffect(() => {
@@ -107,8 +107,8 @@ function HeaderMenus() {
   }
 
   const menuInfo = [
-    { link: "/admin/profile", name: "Tài khoản" },
-    { link: "/admin/articles", name: "Bài viết của tôi" },
+    { link: "/admin/dashboard", name: "My dashboard" },
+    { link: "/admin/articles", name: `${t("myArticles")}` },
   ];
 
   function inforPerson(menuInfo) {
@@ -128,7 +128,6 @@ function HeaderMenus() {
     i18n.changeLanguage(lang);
     dispatch(changeLanguage(lang));
   }
-  const { t, i18n } = useTranslation();
 
   return (
     <div className="tcl-col-7">
@@ -147,14 +146,14 @@ function HeaderMenus() {
             {userInfor && (
               <>
                 <Link to="#">
-                  <img src={userAvatar} alt={userInfor.nickname} />
-                  {userInfor.nickname}
+                  <img src={userAvatar} alt={userInfor.nickName} />
+                  {userInfor.nickName}
                 </Link>
                 <ul>
                   {inforPerson(menuInfo)}
                   <li>
                     <Link to="#" onClick={onClickLogOut}>
-                      Đăng xuất
+                      {t("logout")}
                     </Link>
                   </li>
                 </ul>

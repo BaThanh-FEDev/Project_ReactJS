@@ -29,15 +29,15 @@ export default function ArticleItem({
   const postId = data.id;
   
   
-  const name = data.author_data.nickname;
-  const avatar = data.author_data.avatar;
-  const image = data.featured_media_url;
-  const view = data.view_count;
-  const desc = data.excerpt.rendered;
-  const categories = data.categories;
+  const name = data.authorData.nickname;
+  const avatar = data.authorData.avatar;
+  const image = data.image;
+  const view = data.viewCount;
+  const desc = data.description;
+  const categories = data.categoryIds;
   const slug = data.slug;
-  const date = data.date;
-  const title = data.title.rendered;
+  const date = data.publishDate;
+  const title = data.title;
 
   return (
     <article className={classes}>

@@ -119,7 +119,7 @@ function TagsIndexPage() {
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
-            style={{width: 90,}}
+            style={{ width: 90 }}
           >
             Search
           </Button>
@@ -179,7 +179,6 @@ function TagsIndexPage() {
       title: "ID",
       dataIndex: "id",
       width: "10%",
-      ...getColumnSearchProps("id"),
     },
     {
       key: "name",
@@ -285,76 +284,80 @@ function TagsIndexPage() {
   };
 
   return (
-    <Layout>
-      <Sidebar />
-      <Content>
-        <Breadcrumb items={[{ title: "Admin" }, { title: "Tags" }]} />
-        <div className="content">
-          <TagsControl
-            selectedTagIds={selectedTagIds}
-            setSelectedRowKeys={setSelectedRowKeys}
-            setSelectedTagIds={setSelectedTagIds}
-          />
-          <div style={{ marginTop: 30 }}>
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={dataSource}
-              pagination={{
-                ...pagination,
-                disabled: loading,
-              }}
-              onChange={handleTableChange}
-              loading={loading}
-            />
-          </div>
-          <Modal
-            title={`Chỉnh sửa tag ID: ${tagEdit.id}`}
-            centered
-            open={open}
-            footer={null} // Xóa nút Cancel và OK của Modal
-            onCancel={() => setOpen(false)}
-            width={{
-              xs: "80%",
-              sm: "60%",
-              md: "50%",
-              lg: "40%",
-              xl: "30%",
-              xxl: "25%",
+    <>
+      <Breadcrumb items={[{ title: "Admin" }, { title: "Tags" }]} />
+      <div className="content">
+        <TagsControl
+          selectedTagIds={selectedTagIds}
+          setSelectedRowKeys={setSelectedRowKeys}
+          setSelectedTagIds={setSelectedTagIds}
+        />
+        <div style={{ marginTop: 30 }}>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={dataSource}
+            pagination={{
+              ...pagination,
+              disabled: loading,
             }}
-          >
-            <Form form={form} onFinish={handleSubmitEdit} layout="vertical">
-              <Form.Item
-                label="Name"
-                name="name"
-                rules={[
-                  { required: true, message: "Tên không được bỏ trống!" },
-                ]}
-              >
-                <Input placeholder="Enter name" />
-              </Form.Item>
-              <Form.Item label="Slug" name="slug">
-                <Input placeholder="Enter slug" />
-              </Form.Item>
-              <Form.Item style={{ textAlign: "right" }}>
-                <Button
-                  style={{ marginRight: 8 }}
-                  onClick={() => setOpen(false)}
-                  type="primary"
-                  danger
-                >
-                  Hủy bỏ
-                </Button>
-                <Button type="primary" htmlType="submit">
-                  Sửa
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
+            onChange={handleTableChange}
+            loading={loading}
+          />
         </div>
-      </Content>
-    </Layout>
+        <Modal
+          title={`Chỉnh sửa tag ID: ${tagEdit.id}`}
+          centered
+          open={open}
+          footer={null} // Xóa nút Cancel và OK của Modal
+          onCancel={() => setOpen(false)}
+          width={{
+            xs: "80%",
+            sm: "60%",
+            md: "50%",
+            lg: "40%",
+            xl: "30%",
+            xxl: "25%",
+          }}
+        >
+          <Form form={form} onFinish={handleSubmitEdit} layout="vertical">
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Tên không được bỏ trống!" }]}
+            >
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item label="Slug" name="slug">
+              <Input placeholder="Enter slug" />
+            </Form.Item>
+            <Form.Item style={{ textAlign: "right" }}>
+              <Button
+                style={{ marginRight: 8 }}
+                onClick={() => setOpen(false)}
+                type="primary"
+                danger
+              >
+                Hủy bỏ
+              </Button>
+              <Button type="primary" htmlType="submit">
+                Sửa
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
+    </>
   );
+
+  // return (
+  //   <Layout>
+  //     <Sidebar />
+  //     <Content>
+
+  //     </Content>
+  //   </Layout>
+  // );
 }
 
 export default TagsIndexPage;

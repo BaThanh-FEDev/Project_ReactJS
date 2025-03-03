@@ -6,9 +6,9 @@ function PostDetailSidebar() {
   const postDetail = useSelector((state) => state.POST.postDetail)
   if(!postDetail ) return <></>;
   
-  const author = postDetail.author_data.nickname;
-  const avatar = postDetail.author_data.avatar;
-  const desc = postDetail.excerpt.rendered;
+  const author = postDetail.authorData.nickname;
+  const avatar = postDetail.authorData.avatar;
+  const desc = postDetail.authorData.description;
   
   return (
     <div className="post-detail__side">

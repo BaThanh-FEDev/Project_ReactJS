@@ -64,7 +64,7 @@ function CommentForm({onCloseForm, isFocus}) {
       <div className="comments__form--control">
         <div className="comments__section--avatar">
           <a href="#" onClick={(e) => e.preventDefault()}>
-            <img src={userInfor?.simple_local_avatar.full} alt={userInfor.nickname} />
+            <img src={userInfor?.avatar} alt={userInfor.nickname} />
           </a>
         </div>
         <textarea ref={textareaRef} onChange={handleChange} value={value} id="formComment" />

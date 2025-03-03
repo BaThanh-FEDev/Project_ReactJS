@@ -12,18 +12,24 @@ import { t } from "i18next";
 function TagsPage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const lang = useSelector((state) => state.CONFIG.lang)
   const [loading, setLoading] = useState(false);
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
 
-  const { postListByTag, nameTag, currentPage, totalPage } = useSelector(
+  const { postListByTag, nameTag, currentPage: pageNumber, totalPage } = useSelector(
     (state) => state.TAG.tagData
   );
-  const lang = useSelector((state) => state.CONFIG.lang)
 
   useEffect(() => {
-    if (slug) dispatch(getPostByTags({ slug, pageNumber: 1, lang }));
+    if (slug) {
+          setIsFirstLoading(true); // Bật loading khi bắt đầu fetch
+          dispatch(getPostByTags({ slug, pageNumber: 1, lang })).finally(() =>
+            setIsFirstLoading(false)
+          );
+        }
   }, [slug, dispatch, lang]);
 
-  if (!postListByTag) {
+  if (isFirstLoading) {
     return (
       <div className="loading-container">
         <Spin size="large" />
@@ -33,7 +39,7 @@ function TagsPage() {
 
   const handleLoadMore = () => {
     setLoading(true);
-    dispatch(getPostByTags({ slug, pageNumber: currentPage + 1 })).finally(
+    dispatch(getPostByTags({ slug, pageNumber: pageNumber + 1 })).finally(
       () => setLoading(false)
     );
   };
@@ -61,10 +67,10 @@ function TagsPage() {
           )}
         </div>
 
-        {currentPage < totalPage && (
+        {pageNumber < totalPage && (
           <div className="text-center">
             <Button onClick={handleLoadMore} type="primary" size="large" loading={loading} disabled={loading}>
-              Tải thêm
+              {t("viewMore")}
             </Button>
           </div>
         )}
